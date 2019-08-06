@@ -1,4 +1,8 @@
-import { GET_EMPLOYEES } from "../actions/types.js";
+import {
+  GET_EMPLOYEES,
+  DELETE_EMPLOYEE,
+  ADD_EMPLOYEE
+} from "../actions/types.js";
 //creating inital state
 const initialState = {
   //what we fetching from the backend
@@ -13,6 +17,19 @@ export default function(state = initialState, action) {
         //user spread operator to include evrything tint teh dstate
         ...state,
         employees: action.payload
+      };
+
+    case DELETE_EMPLOYEE:
+      return {
+        ...state,
+        employees: state.employees.filter(
+          employee => employee.id !== action.payload
+        )
+      };
+    case ADD_EMPLOYEE:
+      return {
+        ...state,
+        employees: [...state.employees, actions.payload]
       };
     default:
       return state;

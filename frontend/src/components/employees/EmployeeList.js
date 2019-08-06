@@ -2,12 +2,14 @@ import React, { Component, Fragment } from "react";
 //to use reduc from a compont , use connect
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { getEmployees } from "../../actions/employees";
+import { getEmployees, deleteEmployee } from "../../actions/employees";
 
 export class EmployeeList extends Component {
   //object
   static PropTypes = {
-    employees: PropTypes.array.isRequired
+    employees: PropTypes.array.isRequired,
+    getEmployees: PropTypes.func.isRequired,
+    deleteEmployee: PropTypes.func.isRequired
   };
   //call when its load
   componentDidMount() {
@@ -22,7 +24,7 @@ export class EmployeeList extends Component {
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
-            <th>Message</th>
+            <th>Favourite Quote</th>
             <th />
           </thead>
           <tbody>
@@ -33,7 +35,13 @@ export class EmployeeList extends Component {
                 <td>{employee.email}</td>
                 <td>{employee.quote}</td>
                 <td>
-                  <button className="btn btn-danger btn-sm">Dismissal</button>
+                  <button
+                    onClick={this.props.deleteEmployee.bind(this, employee.id)}
+                    className="btn btn-danger btn-sm"
+                  >
+                    {" "}
+                    Dismissal
+                  </button>
                 </td>
               </tr>
             ))}
@@ -51,5 +59,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getEmployees }
+  { getEmployees, deleteEmployee }
 )(EmployeeList);
