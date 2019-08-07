@@ -1,10 +1,10 @@
 import axios from "axios";
-import { createMessage } from "./messages";
+import { createMessage, returnErrors } from "./messages";
 import {
   GET_EMPLOYEES,
   DELETE_EMPLOYEE,
-  ADD_EMPLOYEE,
-  GET_ERRORS
+  ADD_EMPLOYEE
+  //GET_ERRORS
 } from "./types";
 
 //GET EMPLOYEELIST
@@ -42,8 +42,10 @@ export const deleteEmployee = id => dispatch => {
         type: DELETE_EMPLOYEE,
         payload: id
       });
-    })
-    .catch(err => console.log(err));
+    })//outputing the actual error from backend
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };
 
 //ADD EMPLOYEE/ ONBOARDING PROCESS
@@ -63,6 +65,11 @@ export const addEmployee = employee => dispatch => {
         payload: res.data
       });
     })
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+  /**
+   *  rewrite as above
     .catch(err => {
       const errors = {
         msg: err.response.data,
@@ -73,4 +80,5 @@ export const addEmployee = employee => dispatch => {
         payload: errors
       });
     });
+     */
 };
