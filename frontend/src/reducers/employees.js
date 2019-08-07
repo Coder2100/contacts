@@ -29,7 +29,7 @@ export default function(state = initialState, action) {
     case ADD_EMPLOYEE:
       return {
         ...state,
-        employees: [...state.employees, actions.payload]
+        employees: [...state.employees, action.payload]
       };
     default:
       return state;

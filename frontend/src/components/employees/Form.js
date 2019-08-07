@@ -20,6 +20,12 @@ class Form extends Component {
     const { name, email, quote } = this.state;
     const employee = { name, email, quote };
     this.props.addEmployee(employee);
+    //crear fields after submitting
+    this.setState({
+      name: "",
+      email: "",
+      message: ""
+    });
   };
   render() {
     //creating a values to fire in onChange events
