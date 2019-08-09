@@ -1,21 +1,35 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+//redux
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { login } from "../../actions/auth"; //login function
+
 class Login extends Component {
   //application level state...not redux
   state = {
     username: "",
-    email: "",
-    password: "",
     password: ""
+  };
+  //static
+  static propTypes = {
+    login: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes
   };
   //create events for submit and onclick the button]
   onSubmit = e => {
     e.preventDefault();
-    console.log("submit");
+    //console.log("submit");
+    //fire function
+    this.props.login(this.state.username, this.state.password);
   };
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
   render() {
+    //redirect
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/" />;
+    }
     //use distructuring to get the form fields from the state
     const { username, password } = this.state;
     return (
@@ -58,5 +72,11 @@ class Login extends Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
 
-export default Login;
+export default connect(
+  mapStateToProps,
+  { login }
+)(Login);

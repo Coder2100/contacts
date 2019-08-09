@@ -18,14 +18,19 @@ class Alerts extends Component {
       if (error.msg.name) alert.error(`Name: ${error.msg.name.join()}`);
       if (error.msg.email) alert.error(`email: ${error.msg.email.join()}`);
       if (error.msg.email) alert.error(`quote: ${error.msg.quote.join()}`);
+      //logout
+      if (error.msg.non_field_errors)
+        alert.error(`quote: ${error.msg.non_field_errors.join()}`);
+      //username error if exist
+      if (error.msg.username) alert.error(error.msg.username.join());
     }
     //check if employee deleted
     if (message !== prevProps.message) {
       if (message.deleteEmployee) alert.success(message.deleteEmployee);
-    }
-    //check if employee added successfully
-    if (message !== prevProps.message) {
+      //check if employee added successfully
       if (message.addEmployee) alert.success(message.addEmployee);
+      //regiser error
+      if (message.passwordNotMatch) alert.error(message.passwordNotMatch);
     }
   }
   render() {

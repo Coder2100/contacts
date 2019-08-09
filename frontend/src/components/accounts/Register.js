@@ -1,21 +1,47 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { register } from "../../actions/auth";
+import { createMessage } from "../../actions/messages";
+
 class Register extends Component {
   //application level state...not redux
   state = {
     username: "",
     email: "",
     password: "",
-    password: ""
+    password2: ""
+  };
+
+  //static
+  static propTypes = {
+    register: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool
   };
   //create events for submit and onclick the button]
   onSubmit = e => {
     e.preventDefault();
-    console.log("submit");
+    //console.log("submit");
+    const { username, email, password, password2 } = this.state;
+    if (password !== password2) {
+      this.props.createMessage({ passwordNotMatch: "Passwords do not match" });
+    } else {
+      const newUser = {
+        username,
+        email,
+        password
+      };
+      this.props.register(newUser);
+    }
   };
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
   render() {
+    //redirect to the home page
+    if (this.props.isAuthenticated) {
+      return <Return to="/" />;
+    }
     //use distructuring to get the form fields from the state
     const { username, email, password, password2 } = this.state;
     return (
@@ -78,4 +104,8 @@ class Register extends Component {
   }
 }
 
-export default Register;
+const mapStateToProps = state => ({ isAuthenticated: state.isAuthenticated });
+export default connect(
+  mapStateToProps,
+  { register, createMessage }
+)(Register);

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { tokenConfig } from "./auth";
 import { createMessage, returnErrors } from "./messages";
 import {
   GET_EMPLOYEES,
@@ -12,9 +13,9 @@ import {
 //get leads methods
 //gettting employee list from data backend servers
 
-export const getEmployees = () => dispatch => {
+export const getEmployees = () => (dispatch, getState) => {
   axios
-    .get("/api/employees/")
+    .get("/api/employees/ tokenConfig(getState)")
     .then(res => {
       dispatch({
         type: GET_EMPLOYEES,
@@ -27,9 +28,9 @@ export const getEmployees = () => dispatch => {
 
 //delete employees from DB that has been dismissed
 //pass in id for specific employee
-export const deleteEmployee = id => dispatch => {
+export const deleteEmployee = id => (dispatch, getState) => {
   axios
-    .delete(`/api/employees/${id}/`)
+    .delete(`/api/employees/${id}/`, tokenConfig(getState))
     .then(res => {
       //create mesage before deispatching messages
       dispatch(
@@ -42,7 +43,7 @@ export const deleteEmployee = id => dispatch => {
         type: DELETE_EMPLOYEE,
         payload: id
       });
-    })//outputing the actual error from backend
+    }) //outputing the actual error from backend
     .catch(err =>
       dispatch(returnErrors(err.response.data, err.response.status))
     );
@@ -50,9 +51,9 @@ export const deleteEmployee = id => dispatch => {
 
 //ADD EMPLOYEE/ ONBOARDING PROCESS
 
-export const addEmployee = employee => dispatch => {
+export const addEmployee = employee => (dispatch, getState) => {
   axios
-    .post("/api/employees/", employee)
+    .post("/api/employees/", employee, tokenConfig(getState))
     .then(res => {
       //success message after adding employee
       dispatch(
